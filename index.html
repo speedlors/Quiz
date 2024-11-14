@@ -1,49 +1,125 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="Style.css">
-</head>
-<body>
-    <div class="container">
-        <!-- Écran de configuration -->
-        <div id="configScreen" class="screen active">
-            <h1>Configuration des Joueurs</h1>
-            <form id="playerForm">
-                <div class="player-inputs" id="playerInputs">
-                    <input type="text" class="input-field" placeholder="Nom du joueur 1" required>
-                </div>
-                <div class="button-container">
-                    <button type="button" class="add-player-btn" id="addPlayerBtn">Ajouter un joueur</button>
-                    <button type="submit" class="btn">Commencer</button>
-                </div>
-            </form>
-        </div>
-
-        <!-- Écran de jeu -->
-        <div id="gameScreen" class="screen">
-            <div class="score-display" id="scoreDisplay"></div>
-            <div class="current-player" id="currentPlayer"></div>
-            <div class="question-container">
-                <div class="timer-container">
-                    <div id="timer" class="timer">30</div>
-                </div>
-                <div class="points" id="questionPoints"></div>
-                <div id="questionText"></div>
-                <div id="selectedCount" class="selected-count"></div>
-                <div class="options" id="options"></div>
-                <button class="btn submit-btn" id="submitAnswer">Valider les réponses</button>
-            </div>
-        </div>
-
-        <!-- Écran de fin -->
-        <div id="endScreen" class="screen">
-            <h1>Fin de la partie!</h1>
-            <div id="finalScores"></div>
-            <div class="button-container">
-                <button class="btn" onclick="resetGame()">Nouvelle Partie</button>
-            </div>
-        </div>
+<!-- Modification à apporter dans la div question-container -->
+<div class="question-container">
+    <div class="timer-container">
+        <div id="timer" class="timer">30</div>
     </div>
-</body>
-</html>
+    <div class="points" id="questionPoints"></div>
+    <!-- ... reste du contenu ... -->
+</div>
+
+<!-- Ajout du CSS -->
+<style>
+/* Styles existants... */
+
+.timer-container {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.timer {
+    font-size: 24px;
+    font-weight: bold;
+    color: #28a745;
+    background: #f8f9fa;
+    padding: 10px 20px;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+.timer.warning {
+    color: #ffc107;
+}
+
+.timer.danger {
+    color: #dc3545;
+}
+</style>
+
+<!-- Modifications du JavaScript -->
+<script>
+// Ajout des variables pour le minuteur
+let timeLeft = 30;
+let timerInterval;
+let isPaused = false;
+
+// Fonction pour démarrer le minuteur
+function startTimer() {
+    clearInterval(timerInterval);
+    timeLeft = 30;
+    updateTimerDisplay();
+    
+    timerInterval = setInterval(() => {
+        if (!isPaused) {
+            timeLeft--;
+            updateTimerDisplay();
+            
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                handleTimeUp();
+            }
+        }
+    }, 1000);
+}
+
+// Fonction pour mettre à jour l'affichage du minuteur
+function updateTimerDisplay() {
+    const timerElement = document.getElementById('timer');
+    timerElement.textContent = timeLeft;
+    
+    // Mise à jour des classes pour le style
+    timerElement.className = 'timer';
+    if (timeLeft <= 10 && timeLeft > 5) {
+        timerElement.classList.add('warning');
+    } else if (timeLeft <= 5) {
+        timerElement.classList.add('danger');
+    }
+}
+
+// Fonction pour gérer la fin du temps
+function handleTimeUp() {
+    const currentQuestion = questions[currentQuestionIndex];
+    // Si aucune réponse n'est sélectionnée, on considère que c'est un échec
+    if (selectedAnswers.size < currentQuestion.minRequired) {
+        checkAnswers(); // Vérifie les réponses actuelles même si insuffisantes
+    }
+}
+
+// Modifier la fonction displayQuestion pour inclure le démarrage du minuteur
+function displayQuestion() {
+    if (currentQuestionIndex >= questions.length) {
+        showEndScreen();
+        return;
+    }
+
+    // Réinitialiser le minuteur
+    startTimer();
+    
+    selectedAnswers.clear();
+    const question = questions[currentQuestionIndex];
+    // ... reste du code de displayQuestion ...
+}
+
+// Modifier la fonction checkAnswers pour arrêter le minuteur
+function checkAnswers() {
+    clearInterval(timerInterval);
+    const question = questions[currentQuestionIndex];
+    // ... reste du code de checkAnswers ...
+}
+
+// Ajouter la gestion de la pause
+function togglePause() {
+    isPaused = !isPaused;
+    const pauseBtn = document.getElementById('pauseBtn');
+    if (pauseBtn) {
+        pauseBtn.textContent = isPaused ? 'Reprendre' : 'Pause';
+    }
+}
+
+// Modifier la fonction resetGame pour réinitialiser le minuteur
+function resetGame() {
+    clearInterval(timerInterval);
+    timeLeft = 30;
+    isPaused = false;
+    // ... reste du code de resetGame ...
+}
+</script>
