@@ -1,125 +1,159 @@
-<!-- Modification à apporter dans la div question-container -->
-<div class="question-container">
-    <div class="timer-container">
-        <div id="timer" class="timer">30</div>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quiz Simple</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f0f0f0;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        
+        .question {
+            font-size: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .players {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .player {
+            text-align: center;
+            padding: 10px;
+            background-color: #eee;
+            border-radius: 5px;
+        }
+        
+        .score {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        button {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .buzzer {
+            background-color: #ff4444;
+            color: white;
+            font-size: 16px;
+        }
+        
+        .buzzer:disabled {
+            background-color: #ccc;
+        }
+        
+        .control {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .control button {
+            background-color: #4CAF50;
+            color: white;
+            width: auto;
+            padding: 10px 20px;
+            margin: 0 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="question" id="question">
+            Quelle est la capitale de la France ?
+        </div>
+        
+        <div class="players">
+            <div class="player">
+                <h3>Joueur 1</h3>
+                <div class="score">0</div>
+                <button class="buzzer" onclick="buzz(1)">BUZZ</button>
+            </div>
+            <div class="player">
+                <h3>Joueur 2</h3>
+                <div class="score">0</div>
+                <button class="buzzer" onclick="buzz(2)">BUZZ</button>
+            </div>
+            <div class="player">
+                <h3>Joueur 3</h3>
+                <div class="score">0</div>
+                <button class="buzzer" onclick="buzz(3)">BUZZ</button>
+            </div>
+        </div>
+        
+        <div class="control">
+            <button onclick="validerReponse(true)">Correct</button>
+            <button onclick="validerReponse(false)">Incorrect</button>
+        </div>
     </div>
-    <div class="points" id="questionPoints"></div>
-    <!-- ... reste du contenu ... -->
-</div>
 
-<!-- Ajout du CSS -->
-<style>
-/* Styles existants... */
-
-.timer-container {
-    text-align: center;
-    margin-bottom: 15px;
-}
-
-.timer {
-    font-size: 24px;
-    font-weight: bold;
-    color: #28a745;
-    background: #f8f9fa;
-    padding: 10px 20px;
-    border-radius: 5px;
-    display: inline-block;
-}
-
-.timer.warning {
-    color: #ffc107;
-}
-
-.timer.danger {
-    color: #dc3545;
-}
-</style>
-
-<!-- Modifications du JavaScript -->
-<script>
-// Ajout des variables pour le minuteur
-let timeLeft = 30;
-let timerInterval;
-let isPaused = false;
-
-// Fonction pour démarrer le minuteur
-function startTimer() {
-    clearInterval(timerInterval);
-    timeLeft = 30;
-    updateTimerDisplay();
-    
-    timerInterval = setInterval(() => {
-        if (!isPaused) {
-            timeLeft--;
-            updateTimerDisplay();
+    <script>
+        const questions = [
+            "Quelle est la capitale de la France ?",
+            "Combien font 2 + 2 ?",
+            "Quelle est la couleur du ciel ?",
+            "En quelle année a débuté la Révolution française ?",
+            "Qui a peint la Joconde ?"
+        ];
+        
+        let currentQuestion = 0;
+        let scores = [0, 0, 0];
+        let currentPlayer = null;
+        
+        function buzz(player) {
+            currentPlayer = player;
+            const buzzers = document.querySelectorAll('.buzzer');
+            buzzers.forEach(b => b.disabled = true);
+        }
+        
+        function validerReponse(correct) {
+            if (currentPlayer === null) return;
             
-            if (timeLeft <= 0) {
-                clearInterval(timerInterval);
-                handleTimeUp();
+            if (correct) {
+                scores[currentPlayer-1]++;
+                document.querySelectorAll('.score')[currentPlayer-1].textContent = scores[currentPlayer-1];
+            }
+            
+            currentPlayer = null;
+            const buzzers = document.querySelectorAll('.buzzer');
+            buzzers.forEach(b => b.disabled = false);
+            
+            currentQuestion++;
+            if (currentQuestion < questions.length) {
+                document.getElementById('question').textContent = questions[currentQuestion];
+            } else {
+                finDuJeu();
             }
         }
-    }, 1000);
-}
-
-// Fonction pour mettre à jour l'affichage du minuteur
-function updateTimerDisplay() {
-    const timerElement = document.getElementById('timer');
-    timerElement.textContent = timeLeft;
-    
-    // Mise à jour des classes pour le style
-    timerElement.className = 'timer';
-    if (timeLeft <= 10 && timeLeft > 5) {
-        timerElement.classList.add('warning');
-    } else if (timeLeft <= 5) {
-        timerElement.classList.add('danger');
-    }
-}
-
-// Fonction pour gérer la fin du temps
-function handleTimeUp() {
-    const currentQuestion = questions[currentQuestionIndex];
-    // Si aucune réponse n'est sélectionnée, on considère que c'est un échec
-    if (selectedAnswers.size < currentQuestion.minRequired) {
-        checkAnswers(); // Vérifie les réponses actuelles même si insuffisantes
-    }
-}
-
-// Modifier la fonction displayQuestion pour inclure le démarrage du minuteur
-function displayQuestion() {
-    if (currentQuestionIndex >= questions.length) {
-        showEndScreen();
-        return;
-    }
-
-    // Réinitialiser le minuteur
-    startTimer();
-    
-    selectedAnswers.clear();
-    const question = questions[currentQuestionIndex];
-    // ... reste du code de displayQuestion ...
-}
-
-// Modifier la fonction checkAnswers pour arrêter le minuteur
-function checkAnswers() {
-    clearInterval(timerInterval);
-    const question = questions[currentQuestionIndex];
-    // ... reste du code de checkAnswers ...
-}
-
-// Ajouter la gestion de la pause
-function togglePause() {
-    isPaused = !isPaused;
-    const pauseBtn = document.getElementById('pauseBtn');
-    if (pauseBtn) {
-        pauseBtn.textContent = isPaused ? 'Reprendre' : 'Pause';
-    }
-}
-
-// Modifier la fonction resetGame pour réinitialiser le minuteur
-function resetGame() {
-    clearInterval(timerInterval);
-    timeLeft = 30;
-    isPaused = false;
-    // ... reste du code de resetGame ...
-}
-</script>
+        
+        function finDuJeu() {
+            const maxScore = Math.max(...scores);
+            const gagnant = scores.indexOf(maxScore) + 1;
+            document.getElementById('question').textContent = 
+                `Fin du jeu ! Le joueur ${gagnant} gagne avec ${maxScore} points !`;
+            const buzzers = document.querySelectorAll('.buzzer');
+            buzzers.forEach(b => b.disabled = true);
+        }
+    </script>
+</body>
+</html>
