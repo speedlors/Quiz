@@ -74,14 +74,14 @@
             background-color: #0056b3;
         }
 
+        .btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
         .add-player-btn {
             background-color: #28a745;
             color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
         }
 
         .add-player-btn:hover {
@@ -145,6 +145,13 @@
             text-align: center;
             margin-bottom: 15px;
             color: #666;
+        }
+
+        .question-text {
+            font-size: 18px;
+            margin-bottom: 15px;
+            text-align: center;
+            color: #333;
         }
 
         .selected-count {
@@ -213,279 +220,213 @@
             margin-top: 20px;
         }
 
-        .submit-btn:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
+        #finalScores {
+            margin: 20px 0;
+            text-align: center;
+            font-size: 18px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Écran de configuration -->
-        <div id="configScreen" class="screen active">
-            <h1>Configuration des Joueurs</h1>
-            <form id="playerForm">
-                <div class="player-inputs" id="playerInputs">
-                    <input type="text" class="input-field" placeholder="Nom du joueur 1" required>
-                </div>
-                <div class="button-container">
-                    <button type="button" class="add-player-btn" id="addPlayerBtn">Ajouter un joueur</button>
-                    <button type="submit" class="btn">Commencer</button>
-                </div>
-            </form>
-        </div>
-
-        <!-- Écran de jeu -->
-        <div id="gameScreen" class="screen">
-            <div class="score-display" id="scoreDisplay"></div>
-            <div class="current-player" id="currentPlayer"></div>
-            <div class="question-container">
-                <div class="timer-container">
-                    <div id="timer" class="timer">30</div>
-                </div>
-                <div class="points" id="questionPoints"></div>
-                <div id="questionText"></div>
-                <div id="selectedCount" class="selected-count"></div>
-                <div class="options" id="options"></div>
-                <button class="btn submit-btn" id="submitAnswer">Valider les réponses</button>
+    <div id="configScreen" class="screen active">
+        <h2>Configuration des Joueurs</h2>
+        <form id="playerForm">
+            <div id="playerInputs">
+                <input type="text" class="input-field" placeholder="Nom du joueur 1" required>
             </div>
-        </div>
+            <button type="button" class="btn" id="addPlayerBtn">Ajouter un joueur</button>
+            <button type="submit" class="btn">Commencer</button>
+        </form>
+    </div>
 
-        <!-- Écran de fin -->
-        <div id="endScreen" class="screen">
-            <h1>Fin de la partie!</h1>
-            <div id="finalScores"></div>
-            <div class="button-container">
-                <button class="btn" onclick="resetGame()">Nouvelle Partie</button>
-            </div>
-        </div>
+    <div id="gameScreen" class="screen">
+        <div id="scoreDisplay"></div>
+        <div id="currentPlayer"></div>
+        <div id="timer" class="timer">30</div>
+        <div id="questionText"></div>
+        <div id="options"></div>
+        <button id="submitAnswer" class="btn">Valider</button>
+    </div>
+
+    <div id="endScreen" class="screen">
+        <h2>Fin de la partie!</h2>
+        <div id="finalScores"></div>
+        <button class="btn" onclick="resetGame()">Nouvelle Partie</button>
     </div>
 
     <script>
-        // Questions du quiz (votre tableau de questions existant)
-        const questions = [
-            {
-                question: "Cite une boisson de petit-dejeuner",
-                options: [
-                    { text: "Thé", correct: true, difficulty: "easy", points: 6 },
-                    { text: "Jus de Pomme", correct: true, difficulty: "easy", points: 10 },
-                    { text: "Eau", correct: true, difficulty: "medium", points: 15 },
-                    { text: "Lait", correct: true, difficulty: "medium", points: 18 },
-                    { text: "Café", correct: true, difficulty: "hard", points: -1 },
-                    { text: "Jus d'orange", correct: true, difficulty: "hard", points: 28 }
-                ],
-                minRequired: 2,
-                maxSelectable: 4
-            },
-            // ... autres questions ...
-        ];
-
+        // Variables globales
         let players = [];
         let scores = {};
         let currentQuestionIndex = 0;
         let currentPlayerIndex = 0;
         let selectedAnswers = new Set();
-        let timeLeft = 30;
         let timerInterval;
-        let isPaused = false;
+        let timeLeft = 30;
+
+        // Questions
+        const questions = [
+            {
+                question: "Cite une boisson de petit-déjeuner",
+                options: [
+                    { text: "Thé", points: 6 },
+                    { text: "Café", points: 8 },
+                    { text: "Jus d'orange", points: 10 },
+                    { text: "Lait", points: 12 }
+                ],
+                maxSelectable: 4
+            }
+        ];
 
         // Configuration des joueurs
-        const playerInputs = document.getElementById('playerInputs');
-        const addPlayerBtn = document.getElementById('addPlayerBtn');
-        const playerForm = document.getElementById('playerForm');
-        let playerCount = 1;
-
-        addPlayerBtn.addEventListener('click', () => {
-            playerCount++;
+        document.getElementById('addPlayerBtn').addEventListener('click', () => {
             const input = document.createElement('input');
             input.type = 'text';
             input.className = 'input-field';
-            input.placeholder = `Nom du joueur ${playerCount}`;
+            input.placeholder = `Nom du joueur ${document.getElementById('playerInputs').children.length + 1}`;
             input.required = true;
-            playerInputs.appendChild(input);
+            document.getElementById('playerInputs').appendChild(input);
         });
 
-        playerForm.addEventListener('submit', (e) => {
+        document.getElementById('playerForm').addEventListener('submit', (e) => {
             e.preventDefault();
-            players = Array.from(playerInputs.getElementsByTagName('input'))
-                .map(input => input.value);
+            players = Array.from(document.querySelectorAll('#playerInputs input')).map(input => input.value);
             players.forEach(player => scores[player] = 0);
             showGameScreen();
-            displayQuestion();
         });
 
-        function startTimer() {
-            clearInterval(timerInterval);
-            timeLeft = 30;
-            updateTimerDisplay();
-            
-            timerInterval = setInterval(() => {
-                if (!isPaused) {
-                    timeLeft--;
-                    updateTimerDisplay();
-                    
-                    if (timeLeft <= 0) {
-                        clearInterval(timerInterval);
-                        checkAnswers();
-                    }
-                }
-            }, 1000);
-        }
-
-        function updateTimerDisplay() {
-            const timerElement = document.getElementById('timer');
-            timerElement.textContent = timeLeft;
-            
-            timerElement.className = 'timer';
-            if (timeLeft <= 10 && timeLeft > 5) {
-                timerElement.classList.add('warning');
-            } else if (timeLeft <= 5) {
-                timerElement.classList.add('danger');
-            }
-        }
-
+        // Gestion de l'affichage
         function showScreen(screenId) {
-            document.querySelectorAll('.screen').forEach(screen => 
-                screen.classList.remove('active'));
+            document.querySelectorAll('.screen').forEach(screen => screen.classList.remove('active'));
             document.getElementById(screenId).classList.add('active');
         }
 
         function showGameScreen() {
             showScreen('gameScreen');
-            updateScoreDisplay();
-        }
-
-        function updateScoreDisplay() {
-            const scoreHtml = Object.entries(scores)
-                .map(([player, score]) => 
-                    `<div class="player-score">${player}: ${score} points</div>`)
-                .join('');
-            document.getElementById('scoreDisplay').innerHTML = scoreHtml;
-            document.getElementById('currentPlayer').textContent = 
-                `Au tour de ${players[currentPlayerIndex]}`;
-        }
-
-        function displayQuestion() {
-            if (currentQuestionIndex >= questions.length) {
-                showEndScreen();
-                return;
-            }
-
+            updateDisplay();
             startTimer();
-            selectedAnswers.clear();
+        }
+
+        function updateDisplay() {
+            // Mise à jour des scores
+            const scoreDisplay = Object.entries(scores)
+                .map(([player, score]) => `<div class="player-score">${player}: ${score} points</div>`)
+                .join('');
+            document.getElementById('scoreDisplay').innerHTML = scoreDisplay;
+            
+            // Affichage du joueur actuel
+            document.getElementById('currentPlayer').textContent = `Au tour de ${players[currentPlayerIndex]}`;
+            
+            // Affichage de la question
             const question = questions[currentQuestionIndex];
             document.getElementById('questionText').textContent = question.question;
-            document.getElementById('questionPoints').textContent = 
-                `Sélectionnez entre ${question.minRequired} et ${question.maxSelectable} réponses`;
             
+            // Affichage des options
             const optionsHtml = question.options
                 .map((option, index) => `
                     <div class="option" data-index="${index}">
-                        <span>${option.text}</span>
-                        <span class="difficulty ${option.difficulty}">${option.points} pts</span>
+                        ${option.text} (${option.points} points)
                     </div>
-                `).join('');
+                `)
+                .join('');
             document.getElementById('options').innerHTML = optionsHtml;
-
+            
+            // Ajout des événements aux options
             document.querySelectorAll('.option').forEach(option => {
-                option.addEventListener('click', () => 
-                    toggleAnswer(parseInt(option.dataset.index)));
+                option.addEventListener('click', () => toggleOption(option));
             });
-
-            updateSelectedCount();
-            document.getElementById('submitAnswer').disabled = true;
         }
 
-        function toggleAnswer(index) {
-            const question = questions[currentQuestionIndex];
-            
+        // Gestion du timer
+        function startTimer() {
+            timeLeft = 30;
+            clearInterval(timerInterval);
+            updateTimer();
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimer();
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    checkAnswers();
+                }
+            }, 1000);
+        }
+
+        function updateTimer() {
+            document.getElementById('timer').textContent = timeLeft;
+        }
+
+        // Gestion des options
+        function toggleOption(option) {
+            const index = parseInt(option.dataset.index);
             if (selectedAnswers.has(index)) {
                 selectedAnswers.delete(index);
-                document.querySelector(`.option[data-index="${index}"]`)
-                    .classList.remove('selected');
-            } else if (selectedAnswers.size < question.maxSelectable) {
+                option.classList.remove('selected');
+            } else if (selectedAnswers.size < questions[currentQuestionIndex].maxSelectable) {
                 selectedAnswers.add(index);
-                document.querySelector(`.option[data-index="${index}"]`)
-                    .classList.add('selected');
+                option.classList.add('selected');
             }
-
-            document.getElementById('submitAnswer').disabled = 
-                selectedAnswers.size < question.minRequired;
-            updateSelectedCount();
         }
 
-        function updateSelectedCount() {
-            const question = questions[currentQuestionIndex];
-            document.getElementById('selectedCount').textContent = 
-                `${selectedAnswers.size} réponse(s) sélectionnée(s) sur ${question.maxSelectable} maximum`;
-        }
-
+        // Vérification des réponses
         document.getElementById('submitAnswer').addEventListener('click', checkAnswers);
 
         function checkAnswers() {
             clearInterval(timerInterval);
             const question = questions[currentQuestionIndex];
-            const options = document.getElementsByClassName('option');
             let pointsEarned = 0;
 
-            Array.from(options).forEach(option => {
-                option.style.pointerEvents = 'none';
-            });
-
+            // Calcul des points
             selectedAnswers.forEach(index => {
-                const option = question.options[index];
-                if (option.correct) {
-                    pointsEarned += option.points;
-                    options[index].classList.add('correct');
-                } else {
-                    pointsEarned = Math.max(0, pointsEarned - option.points);
-                    options[index].classList.add('wrong');
-                }
+                pointsEarned += question.options[index].points;
             });
 
-            question.options.forEach((option, index) => {
-                if (option.correct && !selectedAnswers.has(index)) {
-                    options[index].classList.add('correct');
-                }
-            });
-
+            // Mise à jour du score
             scores[players[currentPlayerIndex]] += pointsEarned;
 
+            // Affichage des réponses correctes
+            document.querySelectorAll('.option').forEach(option => {
+                const index = parseInt(option.dataset.index);
+                if (selectedAnswers.has(index)) {
+                    option.classList.add('correct');
+                }
+            });
+
+            // Passage au joueur suivant
             setTimeout(() => {
                 currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
                 if (currentPlayerIndex === 0) {
                     currentQuestionIndex++;
                 }
-                displayQuestion();
-                updateScoreDisplay();
+                if (currentQuestionIndex >= questions.length) {
+                    showEndScreen();
+                } else {
+                    selectedAnswers.clear();
+                    showGameScreen();
+                }
             }, 2000);
         }
 
         function showEndScreen() {
-            clearInterval(timerInterval);
             showScreen('endScreen');
             const sortedScores = Object.entries(scores)
                 .sort(([,a], [,b]) => b - a)
-                .map(([player, score], index) => `
-                    <div class="player-score">
-                        ${index + 1}. ${player}: ${score} points
-                    </div>
-                `).join('');
+                .map(([player, score], index) => 
+                    `<div class="player-score">${index + 1}. ${player}: ${score} points</div>`)
+                .join('');
             document.getElementById('finalScores').innerHTML = sortedScores;
         }
 
         function resetGame() {
-            clearInterval(timerInterval);
             currentQuestionIndex = 0;
             currentPlayerIndex = 0;
             scores = {};
             selectedAnswers.clear();
             timeLeft = 30;
-            isPaused = false;
-            showScreen('configScreen');
-            playerInputs.innerHTML = 
+            clearInterval(timerInterval);
+            document.getElementById('playerInputs').innerHTML = 
                 '<input type="text" class="input-field" placeholder="Nom du joueur 1" required>';
-            playerCount = 1;
+            showScreen('configScreen');
         }
     </script>
 </body>
