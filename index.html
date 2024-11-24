@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <title>Quiz Family</title>
     <style>
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Roboto', sans-serif; /* Police principale */
         }
         body {
             background: #f0f2f5;
@@ -70,19 +71,35 @@
         .btn-secondary:hover {
             background: #218838;
         }
+        
+        /* Styles pour l'affichage des scores */
         .score-display {
             display: flex;
             justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-            margin-bottom: 20px;
+            gap: 20px; 
+            flex-wrap: wrap; 
+            margin-bottom: 20px; 
         }
+        
         .player-score {
-            background: #f8f9fa;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-weight: bold;
-        }
+            background-color: #007bff; 
+            color: white; 
+            padding: 12px 20px; 
+            border-radius: 8px; 
+            font-weight: bold; 
+            text-align: center; 
+            min-width: 150px; 
+            
+             /* Police spécifique pour les scores */
+             font-family: 'Arial', sans-serif; /* Changer la police ici */
+            
+             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); 
+             transition: transform 0.2s ease-in-out; 
+         }
+
+         .player-score:hover { 
+             transform: translateY(-3px); 
+         }
         .current-player {
             text-align: center;
             font-size: 20px;
@@ -157,7 +174,7 @@
 <body>  
     <div class="container">  
         <div id="configScreen" class="screen active">  
-             <h1>Quiz Family</h1>  
+             <h1>Quiz Family Feud</h1>  
              <div class="player-form">  
                  <div id="playerInputs">  
                      <input type="text" class="input-field" placeholder="Nom du joueur 1" required>  
