@@ -10,13 +10,11 @@
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-
         body {
             background: #f0f2f5;
             min-height: 100vh;
             padding: 20px;
         }
-
         .container {
             max-width: 800px;
             margin: 0 auto;
@@ -25,28 +23,23 @@
             padding: 20px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
-
         .screen {
             display: none;
         }
-
         .screen.active {
             display: block;
         }
-
         h1, h2 {
             color: #333;
             text-align: center;
             margin-bottom: 20px;
         }
-
         .player-form {
             display: flex;
             flex-direction: column;
             gap: 15px;
             margin-bottom: 20px;
         }
-
         .input-field {
             padding: 12px;
             border: 2px solid #ddd;
@@ -54,12 +47,10 @@
             font-size: 16px;
             transition: border-color 0.3s;
         }
-
         .input-field:focus {
             border-color: #007bff;
             outline: none;
         }
-
         .btn {
             padding: 12px 24px;
             border: none;
@@ -70,19 +61,15 @@
             cursor: pointer;
             transition: background 0.3s;
         }
-
         .btn:hover {
             background: #0056b3;
         }
-
         .btn-secondary {
             background: #28a745;
         }
-
         .btn-secondary:hover {
             background: #218838;
         }
-
         .score-display {
             display: flex;
             justify-content: center;
@@ -90,21 +77,18 @@
             flex-wrap: wrap;
             margin-bottom: 20px;
         }
-
         .player-score {
             background: #f8f9fa;
             padding: 10px 20px;
             border-radius: 8px;
             font-weight: bold;
         }
-
         .current-player {
             text-align: center;
             font-size: 20px;
             color: #007bff;
             margin-bottom: 20px;
         }
-
         .timer {
             text-align: center;
             font-size: 24px;
@@ -112,28 +96,23 @@
             color: #28a745;
             margin-bottom: 20px;
         }
-
         .timer.warning {
             color: #ffc107;
         }
-
         .timer.danger {
             color: #dc3545;
         }
-
         .question-text {
             font-size: 20px;
             text-align: center;
             margin-bottom: 20px;
             color: #333;
         }
-
         .options {
             display: grid;
             gap: 10px;
             margin-bottom: 20px;
         }
-
         .option {
             padding: 15px;
             border: 2px solid #ddd;
@@ -144,309 +123,304 @@
             align-items: center;
             transition: all 0.3s;
         }
-
         .option:hover {
             background: #f8f9fa;
         }
-
         .option.selected {
             border-color: #007bff;
             background: #e7f1ff;
         }
-
         .option.correct {
             border-color: #28a745;
             background: #d4edda;
         }
-
+        .option.incorrect { /* Classe pour les réponses incorrectes */  
+          border-color:#dc3545;  
+          background:#f8d7da;  
+      }  
         .points {
             font-weight: bold;
             color: #666;
         }
-
         #finalScores {
             text-align: center;
             font-size: 18px;
             margin-bottom: 20px;
         }
-
         .button-container {
             display: flex;
             gap: 10px;
             justify-content: center;
         }
     </style>
-</head>
-<body>
-    <div class="container">
-        <div id="configScreen" class="screen active">
-            <h1>Quiz Family Feud</h1>
-            <div class="player-form">
-                <div id="playerInputs">
-                    <input type="text" class="input-field" placeholder="Nom du joueur 1" required>
-                </div>
-                <div class="button-container">
-                    <button type="button" class="btn btn-secondary" id="addPlayerBtn">Ajouter un joueur</button>
-                    <button type="button" class="btn" id="startGameBtn">Commencer</button>
-                </div>
-            </div>
-        </div>
+</head>  
+<body>  
+    <div class="container">  
+        <div id="configScreen" class="screen active">  
+             <h1>Quiz Family Feud</h1>  
+             <div class="player-form">  
+                 <div id="playerInputs">  
+                     <input type="text" class="input-field" placeholder="Nom du joueur 1" required>  
+                </div>  
+                <div class="button-container">  
+                    <button type="button" class="btn btn-secondary" id="addPlayerBtn">Ajouter un joueur</button>  
+                    <button type="button" class="btn" id="startGameBtn">Commencer</button>  
+                </div>  
+             </div>  
+         </div>  
 
-        <div id="gameScreen" class="screen">
-            <div id="scoreDisplay" class="score-display"></div>
-            <div id="currentPlayer" class="current-player"></div>
-            <div id="timer" class="timer">30</div>
-            <div id="questionText" class="question-text"></div>
-            <div id="options" class="options"></div>
-            <div class="button-container">
-                <button id="submitAnswer" class="btn">Valider</button>
-            </div>
-        </div>
+         <div id="gameScreen" class="screen">  
+             <div id="scoreDisplay" class="score-display"></div>   
+             <div id="currentPlayer" class="current-player"></div>   
+             <div id="timer" class="timer">30</div>   
+             <div id="questionText" class="question-text"></div>   
+             <div id="options" class="options"></div>   
+             <div class="button-container">   
+                 <button id="submitAnswer" class="btn">Valider</button>   
+             </div>   
+         </div>   
 
-        <div id="endScreen" class="screen">
-            <h2>Fin de la partie!</h2>
-            <div id="finalScores"></div>
-            <div class="button-container">
-                <button class="btn" onclick="resetGame()">Nouvelle Partie</button>
-            </div>
-        </div>
-    </div>
+         <div id="endScreen" class="screen">   
+             <h2>Fin de la partie!</h2>   
+             <div id="finalScores"></div>   
+             <div class="button-container">   
+                 <button class="btn" onclick="resetGame()">Nouvelle Partie</button>   
+             </div>   
+         </div>   
+     </div>
 
-    <script>
-        // Questions modifiées avec des réponses fausses
-        const questions = [
-            {
-                question: "Cite une boisson de petit-déjeuner",
-                options: [
-                    { text: "Café", points: 12, isCorrect: true },
-                    { text: "Thé", points: 10, isCorrect: true },
-                    { text: "Jus d'orange", points: 8, isCorrect: true },
-                    { text: "Bière", points: -1, isCorrect: false },
-                    { text: "Vin rouge", points: -1, isCorrect: false }
-                ],
-                maxSelectable: 5
-            },
-            {
-                question: "Cite un sport d'hiver",
-                options: [
-                    { text: "Ski", points: 12, isCorrect: true },
-                    { text: "Football", points: -1, isCorrect: false },
-                    { text: "Patinage", points: 8, isCorrect: true },
-                    { text: "Tennis", points: -1, isCorrect: false },
-                    { text: "Snowboard", points: 10, isCorrect: true }
-                ],
-                maxSelectable: 5
-            },
-            {
-                question: "Cite un fruit rouge",
-                options: [
-                    { text: "Fraise", points: 12, isCorrect: true },
-                    { text: "Banane", points: -1, isCorrect: false },
-                    { text: "Framboise", points: 10, isCorrect: true },
-                    { text: "Kiwi", points: -1, isCorrect: false },
-                    { text: "Cerise", points: 8, isCorrect: true }
-                ],
-                maxSelectable: 5
-            },
-            {
-                question: "Cite un pays d'Europe",
-                options: [
-                    { text: "France", points: 12, isCorrect: true },
-                    { text: "Japon", points: -1, isCorrect: false },
-                    { text: "Espagne", points: 10, isCorrect: true },
-                    { text: "Brésil", points: -1, isCorrect: false },
-                    { text: "Italie", points: 8, isCorrect: true }
-                ],
-                maxSelectable: 5
-            },
-            {
-                question: "Cite un animal de la ferme",
-                options: [
-                    { text: "Poule", points: 12, isCorrect: true },
-                    { text: "Lion", points: -1, isCorrect: false },
-                    { text: "Vache", points: 10, isCorrect: true },
-                    { text: "Girafe", points: -1, isCorrect: false },
-                    { text: "Cochon", points: 8, isCorrect: true }
-                ],
-                maxSelectable: 5
-            }
-        ];
+     <script>
+         const questions = [
+             {
+                 question:"Cite une boisson de petit-déjeuner",
+                 options:[
+                     { text:"Café", points :12 , isCorrect:true },
+                     { text:"Thé", points :10 , isCorrect:true },
+                     { text:"Jus d'orange", points :8 , isCorrect:true },
+                     { text:"Bière", points :-1 , isCorrect:false },
+                     { text:"Vin rouge", points :-1 , isCorrect:false }
+                 ],
+                 maxSelectable :5
+             },
+             {
+                 question :"Cite un sport d'hiver",
+                 options:[
+                     { text :"Ski", points :12 , isCorrect:true },
+                     { text :"Football", points :-1 , isCorrect:false },
+                     { text :"Patinage", points :8 , isCorrect:true },
+                     { text :"Tennis", points :-1 , isCorrect:false },
+                     { text :"Snowboard", points :10 , isCorrect:true }
+                 ],
+                 maxSelectable :5
+             },
+             {
+                 question :"Cite un fruit rouge",
+                 options:[
+                     { text :"Fraise", points :12 , isCorrect:true },
+                     { text :"Banane", points :-1 , isCorrect:false },
+                     { text :"Framboise", points :10 , isCorrect:true },
+                     { text :"Kiwi", points :-1 , isCorrect:false },
+                     { text :"Cerise", points :8 , isCorrect:true }
+                 ],
+                 maxSelectable :5
+             },
+             {
+                 question :"Cite un pays d'Europe",
+                 options:[
+                     { text :"France", points :12 , isCorrect:true },
+                     { text :"Japon", points :-1 , isCorrect:false },
+                     { text :"Espagne", points :10 , isCorrect:true },
+                     { text :"Brésil", points :-1 , isCorrect:false },
+                     { text :"Italie", points :8 , isCorrect:true }
+                 ],
+                 maxSelectable :5
+             },
+             {
+                 question :"Cite un animal de la ferme",
+                 options:[
+                     { text :"Poule", points :12 , isCorrect:true },
+                     { text :"Lion", points :-1 , isCorrect:false },
+                     { text :"Vache", points :10 , isCorrect:true },
+                     { text :"Girafe", points :-1 , isCorrect:false },
+                     { text :"Cochon", points :8 , isCorrect:true }
+                 ],
+                 maxSelectable :5
+             }
+         ];
 
-        // Variables globales
-        let players = [];
-        let scores = {};
-        let currentQuestionIndex = 0;
-        let currentPlayerIndex = 0;
-        let selectedAnswers = new Set();
-        let timerInterval;
-        let timeLeft = 30;
+         let players = [];
+         let scores = {};
+         let currentQuestionIndex =0 ;
+         let currentPlayerIndex =0 ;
+         let selectedAnswers = new Set();
+         let timerInterval ;
+         let timeLeft =30 ;
 
-        // Configuration initiale
-        document.getElementById('addPlayerBtn').addEventListener('click', () => {
-            const playerCount = document.querySelectorAll('.input-field').length + 1;
-            const input = document.createElement('input');
-            input.type = 'text';
-            input.className = 'input-field';
-            input.placeholder = `Nom du joueur ${playerCount}`;
-            input.required = true;
-            document.getElementById('playerInputs').appendChild(input);
-        });
+         document.getElementById('addPlayerBtn').addEventListener('click', () => {
+             const playerCount = document.querySelectorAll('.input-field').length +1 ;
+             const input = document.createElement('input');
+             input.type ='text';
+             input.className ='input-field';
+             input.placeholder =`Nom du joueur ${playerCount}`;
+             input.required =true ;
+             document.getElementById('playerInputs').appendChild(input);
+         });
 
-        document.getElementById('startGameBtn').addEventListener('click', () => {
-            const inputs = document.querySelectorAll('.input-field');
-            players = Array.from(inputs).map(input => input.value.trim()).filter(value => value !== '');
-            
-            if (players.length < 2) {
-                alert('Il faut au moins 2 joueurs pour commencer!');
-                return;
-            }
+         document.getElementById('startGameBtn').addEventListener('click', () => {
+              const inputs = document.querySelectorAll('.input-field');
+              players = Array.from(inputs).map(input => input.value.trim()).filter(value => value !== '');
+              if (players.length<2) {
+                  alert('Il faut au moins 2 joueurs pour commencer!');
+                  return ;
+              }
+              players.forEach(player => scores[player] =0 );
+              showGameScreen();
+          });
 
-            players.forEach(player => scores[player] = 0);
-            showGameScreen();
-        });
+          function showScreen(screenId) {
+              document.querySelectorAll('.screen').forEach(screen => {
+                  screen.classList.remove('active');
+              });
+              document.getElementById(screenId).classList.add('active');
+          }
 
-        // Fonctions d'affichage
-        function showScreen(screenId) {
-            document.querySelectorAll('.screen').forEach(screen => {
-                screen.classList.remove('active');
-            });
-            document.getElementById(screenId).classList.add('active');
-        }
+          function showGameScreen() {
+              showScreen('gameScreen');
+              updateGameDisplay();
+              startTimer();
+          }
 
-        function showGameScreen() {
-            showScreen('gameScreen');
-            updateGameDisplay();
-            startTimer();
-        }
+          function updateGameDisplay() {
+              const scoreDisplay = Object.entries(scores)
+                  .map(([player, score]) => `<div class="player-score">${player}: ${score} points</div>`)
+                  .join('');
+              document.getElementById('scoreDisplay').innerHTML = scoreDisplay;
 
-        function updateGameDisplay() {
-            // Scores
-            const scoreDisplay = Object.entries(scores)
-                .map(([player, score]) => `<div class="player-score">${player}: ${score} points</div>`)
-                .join('');
-            document.getElementById('scoreDisplay').innerHTML = scoreDisplay;
+              document.getElementById('currentPlayer').textContent = `Au tour de ${players[currentPlayerIndex]}`;
 
-            // Joueur actuel
-            document.getElementById('currentPlayer').textContent = `Au tour de ${players[currentPlayerIndex]}`;
+              const question = questions[currentQuestionIndex];
+              document.getElementById('questionText').textContent = question.question;
 
-            // Question
-            const question = questions[currentQuestionIndex];
-            document.getElementById('questionText').textContent = question.question;
+              const optionsHtml = question.options
+                  .map((option, index) => `
+                      <div class="option" data-index="${index}">
+                          <span>${option.text}</span>
+                          <span class="points">${option.points} points</span>
+                      </div>
+                  `)
+                  .join('');
+              document.getElementById('options').innerHTML = optionsHtml;
 
-            // Options
-            const optionsHtml = question.options
-                .map((option, index) => `
-                    <div class="option" data-index="${index}">
-                        <span>${option.text}</span>
-                        <span class="points">${option.points} points</span>
-                    </div>
-                `)
-                .join('');
-            document.getElementById('options').innerHTML = optionsHtml;
+              document.querySelectorAll('.option').forEach(option => {
+                  option.addEventListener('click', () => toggleOption(option));
+              });
+          }
 
-            // Event listeners des options
-            document.querySelectorAll('.option').forEach(option => {
-                option.addEventListener('click', () => toggleOption(option));
-            });
-        }
+          function startTimer() {
+              timeLeft =30 ;
+              clearInterval(timerInterval);
+              updateTimerDisplay();
+              timerInterval = setInterval(() => {
+                  timeLeft--;
+                  updateTimerDisplay();
+                  if (timeLeft <=0 ) {
+                      clearInterval(timerInterval);
+                      submitAnswers();
+                  }
+              },1000 );
+          }
 
-        // Gestion du timer
-        function startTimer() {
-            timeLeft = 30;
-            clearInterval(timerInterval);
-            updateTimerDisplay();
-            
-            timerInterval = setInterval(() => {
-                timeLeft--;
-                updateTimerDisplay();
-                if (timeLeft <= 0) {
-                    clearInterval(timerInterval);
-                    submitAnswers();
-                }
-            }, 1000);
-        }
+          function updateTimerDisplay() {
+              const timerElement = document.getElementById('timer');
+              timerElement.textContent = timeLeft ;
+              timerElement.classList.remove('warning', 'danger');
+              if (timeLeft <=10 ) {
+                  timerElement.classList.add('danger');
+              } else if (timeLeft <=20 ) {
+                  timerElement.classList.add('warning');
+              }
+          }
 
-        function updateTimerDisplay() {
-            const timerElement = document.getElementById('timer');
-            timerElement.textContent = timeLeft;
-            
-            timerElement.classList.remove('warning', 'danger');
-            if (timeLeft <= 10) {
-                timerElement.classList.add('danger');
-            } else if (timeLeft <= 20) {
-                timerElement.classList.add('warning');
-            }
-        }
+          function toggleOption(option) {
+               const index = parseInt(option.dataset.index);
+               const question = questions[currentQuestionIndex];
+               if (selectedAnswers.has(index)) {
+                   selectedAnswers.delete(index);
+                   option.classList.remove('selected');
+               } else if (selectedAnswers.size< question.maxSelectable) {
+                   selectedAnswers.add(index);
+                   option.classList.add('selected');
+               }
+          }
 
-        // Gestion des options
-        function toggleOption(option) {
-            const index = parseInt(option.dataset.index);
-            const question = questions[currentQuestionIndex];
+          document.getElementById('submitAnswer').addEventListener('click', submitAnswers);
 
-            if (selectedAnswers.has(index)) {
-                selectedAnswers.delete(index);
-                option.classList.remove('selected');
-            } else if (selectedAnswers.size < question.maxSelectable) {
-                selectedAnswers.add(index);
-                option.classList.add('selected');
-            }
-        }
+          function submitAnswers() {
+               clearInterval(timerInterval);
+               const question = questions[currentQuestionIndex];
+               let pointsEarned =0 ;
+               selectedAnswers.forEach(index => {
 
-        // Soumission des réponses
-        document.getElementById('submitAnswer').addEventListener('click', submitAnswers);
+                   const optionElement = document.querySelectorAll('.option')[index];
+                   if (!question.options[index].isCorrect) {
+                       optionElement.classList.add('incorrect'); // Ajout de la classe pour les réponses incorrectes
+                   } else{
+                       optionElement.classList.add('correct'); // Ajout de la classe pour les réponses correctes
+                   }
 
-        function submitAnswers() {
-            clearInterval(timerInterval);
-            const question = questions[currentQuestionIndex];
-            let pointsEarned = 0;
+                   pointsEarned += question.options[index].points;
 
-            selectedAnswers.forEach(index => {
-                pointsEarned += question.options[index].points;
-                document.querySelectorAll('.option')[index].classList.add('correct');
-            });
+               });
+               scores[players[currentPlayerIndex]] +=pointsEarned;
 
-            scores[players[currentPlayerIndex]] += pointsEarned;
+               setTimeout(() => {
 
-            setTimeout(() => {
-                currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
-                if (currentPlayerIndex === 0) {
-                    currentQuestionIndex++;
-                }
+                   currentPlayerIndex =(currentPlayerIndex +1 ) % players.length;
 
-                if (currentQuestionIndex >= questions.length) {
-                    showEndScreen();
-                } else {
-                    selectedAnswers.clear();
-                    showGameScreen();
-                }
-            }, 2000);
-        }
+                   if (currentPlayerIndex ===0 ) {
 
-        function showEndScreen() {
-            showScreen('endScreen');
-            
-            const sortedScores = Object.entries(scores)
-                .sort(([,a], [,b]) => b - a)
-                .map(([player, score], index) => 
-                    `<div class="player-score">${index + 1}. ${player}: ${score} points</div>`)
-                .join('');
-            
-            document.getElementById('finalScores').innerHTML = sortedScores;
-        }
+                       currentQuestionIndex++;
+                   }
 
-        function resetGame() {
-            currentQuestionIndex = 0;
-            currentPlayerIndex = 0;
-            scores = {};
-            selectedAnswers.clear();
-            timeLeft = 30;
-            clearInterval(timerInterval);
-            
-            document.getElementById('playerInputs').innerHTML = 
+                   if (currentQuestionIndex >= questions.length) {
+
+                       showEndScreen();
+                   } else {
+
+                       selectedAnswers.clear();
+                       showGameScreen();
+                   }
+
+               },2000 );
+          }
+
+          function showEndScreen() {
+
+               showScreen('endScreen');
+
+               const sortedScores = Object.entries(scores)
+                   .sort(([,a], [,b]) => b - a)
+                   .map(([player, score], index) => `<div class="player-score">${index +1 }. ${player}: ${score} points</div>`)
+                   .join('');
+               document.getElementById('finalScores').innerHTML = sortedScores;
+
+          }
+
+          function resetGame() {
+
+               currentQuestionIndex =0 ;
+               currentPlayerIndex =0 ;
+               scores ={};
+
+               selectedAnswers.clear();
+               timeLeft=30 ;
+               clearInterval(timerInterval);
+               document.getElementById('playerInputs').innerHTML =
                 '<input type="text" class="input-field" placeholder="Nom du joueur 1" required>';
-            
-            showScreen('configScreen');
-        }
-    </script>
+                showScreen('configScreen');
+
+          }
+
+     </script>
 </body>
 </html>
