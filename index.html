@@ -180,7 +180,7 @@
 <body>
     <div class="container">
         <div id="configScreen" class="screen active">
-            <h1>Quiz Family Feud</h1>
+            <h1>Quiz Family</h1>
             <div class="player-form">
                 <div id="playerInputs">
                     <input type="text" class="input-field" placeholder="Nom du joueur 1" required>
@@ -213,55 +213,60 @@
     </div>
 
     <script>
-        // Questions du jeu
+        // Questions modifiées avec des réponses fausses
         const questions = [
             {
                 question: "Cite une boisson de petit-déjeuner",
                 options: [
-                    { text: "Café", points: 12 },
-                    { text: "Thé", points: 10 },
-                    { text: "Jus d'orange", points: 8 },
-                    { text: "Lait", points: 6 }
-                ],
-                maxSelectable: 4
-            },
-            {
-                question: "Cite un fruit rouge",
-                options: [
-                    { text: "Fraise", points: 12 },
-                    { text: "Framboise", points: 10 },
-                    { text: "Cerise", points: 8 },
-                    { text: "Groseille", points: 6 }
+                    { text: "Café", points: 12, isCorrect: true },
+                    { text: "Thé", points: 10, isCorrect: true },
+                    { text: "Jus d'orange", points: 8, isCorrect: true },
+                    { text: "Bière", points: -10, isCorrect: false },
+                    { text: "Vin rouge", points: -10, isCorrect: false }
                 ],
                 maxSelectable: 4
             },
             {
                 question: "Cite un sport d'hiver",
                 options: [
-                    { text: "Ski", points: 12 },
-                    { text: "Snowboard", points: 10 },
-                    { text: "Patinage", points: 8 },
-                    { text: "Luge", points: 6 }
+                    { text: "Ski", points: 12, isCorrect: true },
+                    { text: "Football", points: -10, isCorrect: false },
+                    { text: "Patinage", points: 8, isCorrect: true },
+                    { text: "Tennis", points: -10, isCorrect: false },
+                    { text: "Snowboard", points: 10, isCorrect: true }
+                ],
+                maxSelectable: 4
+            },
+            {
+                question: "Cite un fruit rouge",
+                options: [
+                    { text: "Fraise", points: 12, isCorrect: true },
+                    { text: "Banane", points: -10, isCorrect: false },
+                    { text: "Framboise", points: 10, isCorrect: true },
+                    { text: "Kiwi", points: -10, isCorrect: false },
+                    { text: "Cerise", points: 8, isCorrect: true }
                 ],
                 maxSelectable: 4
             },
             {
                 question: "Cite un pays d'Europe",
                 options: [
-                    { text: "France", points: 12 },
-                    { text: "Allemagne", points: 10 },
-                    { text: "Espagne", points: 8 },
-                    { text: "Italie", points: 6 }
+                    { text: "France", points: 12, isCorrect: true },
+                    { text: "Japon", points: -10, isCorrect: false },
+                    { text: "Espagne", points: 10, isCorrect: true },
+                    { text: "Brésil", points: -10, isCorrect: false },
+                    { text: "Italie", points: 8, isCorrect: true }
                 ],
                 maxSelectable: 4
             },
             {
-                question: "Cite un légume vert",
+                question: "Cite un animal de la ferme",
                 options: [
-                    { text: "Salade", points: 12 },
-                    { text: "Brocoli", points: 10 },
-                    { text: "Haricots verts", points: 8 },
-                    { text: "Épinards", points: 6 }
+                    { text: "Poule", points: 12, isCorrect: true },
+                    { text: "Lion", points: -10, isCorrect: false },
+                    { text: "Vache", points: 10, isCorrect: true },
+                    { text: "Girafe", points: -10, isCorrect: false },
+                    { text: "Cochon", points: 8, isCorrect: true }
                 ],
                 maxSelectable: 4
             }
