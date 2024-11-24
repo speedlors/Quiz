@@ -2,133 +2,115 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Quiz Game</title>
-    <link rel="stylesheet" href="styles.css">
-
-    <!-- (Keep existing HTML structure) -->
-    <script src="game.js"></script>
+    <title>Quiz Family Feud</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f2f5;
-            line-height: 1.6;
+            background: #f0f2f5;
+            min-height: 100vh;
+            padding: 20px;
         }
 
         .container {
             max-width: 800px;
-            margin: 20px auto;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
             padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         .screen {
             display: none;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         .screen.active {
             display: block;
         }
 
-        h1 {
+        h1, h2 {
+            color: #333;
             text-align: center;
             margin-bottom: 20px;
-            color: #333;
         }
 
-        .player-inputs {
+        .player-form {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 15px;
             margin-bottom: 20px;
         }
 
         .input-field {
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
             font-size: 16px;
+            transition: border-color 0.3s;
         }
 
-        .button-container {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
+        .input-field:focus {
+            border-color: #007bff;
+            outline: none;
         }
 
         .btn {
-            padding: 10px 20px;
+            padding: 12px 24px;
             border: none;
-            border-radius: 5px;
-            background-color: #007bff;
+            border-radius: 8px;
+            background: #007bff;
             color: white;
-            cursor: pointer;
             font-size: 16px;
-            transition: background-color 0.3s;
+            cursor: pointer;
+            transition: background 0.3s;
         }
 
         .btn:hover {
-            background-color: #0056b3;
+            background: #0056b3;
         }
 
-        .btn:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
+        .btn-secondary {
+            background: #28a745;
         }
 
-        .add-player-btn {
-            background-color: #28a745;
-            color: white;
-        }
-
-        .add-player-btn:hover {
-            background-color: #218838;
+        .btn-secondary:hover {
+            background: #218838;
         }
 
         .score-display {
             display: flex;
-            gap: 20px;
             justify-content: center;
-            margin-bottom: 20px;
+            gap: 20px;
             flex-wrap: wrap;
+            margin-bottom: 20px;
         }
 
         .player-score {
-            background-color: #f8f9fa;
+            background: #f8f9fa;
             padding: 10px 20px;
-            border-radius: 5px;
+            border-radius: 8px;
             font-weight: bold;
         }
 
         .current-player {
             text-align: center;
             font-size: 20px;
-            margin-bottom: 20px;
             color: #007bff;
-            font-weight: bold;
-        }
-
-        .timer-container {
-            text-align: center;
             margin-bottom: 20px;
         }
 
         .timer {
+            text-align: center;
             font-size: 24px;
             font-weight: bold;
             color: #28a745;
-            background: #f8f9fa;
-            padding: 10px 20px;
-            border-radius: 5px;
-            display: inline-block;
+            margin-bottom: 20px;
         }
 
         .timer.warning {
@@ -139,30 +121,11 @@
             color: #dc3545;
         }
 
-        .question-container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-
-        .points {
-            text-align: center;
-            margin-bottom: 15px;
-            color: #666;
-        }
-
         .question-text {
-            font-size: 18px;
-            margin-bottom: 15px;
+            font-size: 20px;
             text-align: center;
+            margin-bottom: 20px;
             color: #333;
-        }
-
-        .selected-count {
-            text-align: center;
-            margin: 10px 0;
-            color: #666;
         }
 
         .options {
@@ -174,7 +137,7 @@
         .option {
             padding: 15px;
             border: 2px solid #ddd;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
             display: flex;
             justify-content: space-between;
@@ -183,83 +146,127 @@
         }
 
         .option:hover {
-            background-color: #f8f9fa;
+            background: #f8f9fa;
         }
 
         .option.selected {
             border-color: #007bff;
-            background-color: #e7f1ff;
+            background: #e7f1ff;
         }
 
         .option.correct {
             border-color: #28a745;
-            background-color: #d4edda;
+            background: #d4edda;
         }
 
-        .option.wrong {
-            border-color: #dc3545;
-            background-color: #f8d7da;
-        }
-
-        .difficulty {
-            font-size: 14px;
-            padding: 3px 8px;
-            border-radius: 3px;
-            color: white;
-        }
-
-        .easy {
-            background-color: #28a745;
-        }
-
-        .medium {
-            background-color: #ffc107;
-        }
-
-        .hard {
-            background-color: #dc3545;
-        }
-
-        .submit-btn {
-            width: 100%;
-            margin-top: 20px;
+        .points {
+            font-weight: bold;
+            color: #666;
         }
 
         #finalScores {
-            margin: 20px 0;
             text-align: center;
             font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
         }
     </style>
 </head>
 <body>
-    <div id="configScreen" class="screen active">
-        <h2>Configuration des Joueurs</h2>
-        <form id="playerForm">
-            <div id="playerInputs">
-                <input type="text" class="input-field" placeholder="Nom du joueur 1" required>
+    <div class="container">
+        <div id="configScreen" class="screen active">
+            <h1>Quiz Family Feud</h1>
+            <div class="player-form">
+                <div id="playerInputs">
+                    <input type="text" class="input-field" placeholder="Nom du joueur 1" required>
+                </div>
+                <div class="button-container">
+                    <button type="button" class="btn btn-secondary" id="addPlayerBtn">Ajouter un joueur</button>
+                    <button type="button" class="btn" id="startGameBtn">Commencer</button>
+                </div>
             </div>
-            <button type="button" class="btn" id="addPlayerBtn">Ajouter un joueur</button>
-            <button type="submit" class="btn">Commencer</button>
-        </form>
-    </div>
+        </div>
 
-    <div id="gameScreen" class="screen">
-        <div id="scoreDisplay"></div>
-        <div id="currentPlayer"></div>
-        <div id="timer" class="timer">30</div>
-        <div id="questionText"></div>
-        <div id="options"></div>
-        <button id="submitAnswer" class="btn">Valider</button>
-    </div>
+        <div id="gameScreen" class="screen">
+            <div id="scoreDisplay" class="score-display"></div>
+            <div id="currentPlayer" class="current-player"></div>
+            <div id="timer" class="timer">30</div>
+            <div id="questionText" class="question-text"></div>
+            <div id="options" class="options"></div>
+            <div class="button-container">
+                <button id="submitAnswer" class="btn">Valider</button>
+            </div>
+        </div>
 
-    <div id="endScreen" class="screen">
-        <h2>Fin de la partie!</h2>
-        <div id="finalScores"></div>
-        <button class="btn" onclick="resetGame()">Nouvelle Partie</button>
+        <div id="endScreen" class="screen">
+            <h2>Fin de la partie!</h2>
+            <div id="finalScores"></div>
+            <div class="button-container">
+                <button class="btn" onclick="resetGame()">Nouvelle Partie</button>
+            </div>
+        </div>
     </div>
 
     <script>
+        // Questions du jeu
+        const questions = [
+            {
+                question: "Cite une boisson de petit-déjeuner",
+                options: [
+                    { text: "Café", points: 12 },
+                    { text: "Thé", points: 10 },
+                    { text: "Jus d'orange", points: 8 },
+                    { text: "Lait", points: 6 }
+                ],
+                maxSelectable: 4
+            },
+            {
+                question: "Cite un fruit rouge",
+                options: [
+                    { text: "Fraise", points: 12 },
+                    { text: "Framboise", points: 10 },
+                    { text: "Cerise", points: 8 },
+                    { text: "Groseille", points: 6 }
+                ],
+                maxSelectable: 4
+            },
+            {
+                question: "Cite un sport d'hiver",
+                options: [
+                    { text: "Ski", points: 12 },
+                    { text: "Snowboard", points: 10 },
+                    { text: "Patinage", points: 8 },
+                    { text: "Luge", points: 6 }
+                ],
+                maxSelectable: 4
+            },
+            {
+                question: "Cite un pays d'Europe",
+                options: [
+                    { text: "France", points: 12 },
+                    { text: "Allemagne", points: 10 },
+                    { text: "Espagne", points: 8 },
+                    { text: "Italie", points: 6 }
+                ],
+                maxSelectable: 4
+            },
+            {
+                question: "Cite un légume vert",
+                options: [
+                    { text: "Salade", points: 12 },
+                    { text: "Brocoli", points: 10 },
+                    { text: "Haricots verts", points: 8 },
+                    { text: "Épinards", points: 6 }
+                ],
+                maxSelectable: 4
+            }
+        ];
+
         // Variables globales
         let players = [];
         let scores = {};
@@ -269,74 +276,70 @@
         let timerInterval;
         let timeLeft = 30;
 
-        // Questions
-        const questions = [
-            {
-                question: "Cite une boisson de petit-déjeuner",
-                options: [
-                    { text: "Thé", points: 6 },
-                    { text: "Café", points: 8 },
-                    { text: "Jus d'orange", points: 10 },
-                    { text: "Lait", points: 12 }
-                ],
-                maxSelectable: 4
-            }
-        ];
-
-        // Configuration des joueurs
+        // Configuration initiale
         document.getElementById('addPlayerBtn').addEventListener('click', () => {
+            const playerCount = document.querySelectorAll('.input-field').length + 1;
             const input = document.createElement('input');
             input.type = 'text';
             input.className = 'input-field';
-            input.placeholder = `Nom du joueur ${document.getElementById('playerInputs').children.length + 1}`;
+            input.placeholder = `Nom du joueur ${playerCount}`;
             input.required = true;
             document.getElementById('playerInputs').appendChild(input);
         });
 
-        document.getElementById('playerForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            players = Array.from(document.querySelectorAll('#playerInputs input')).map(input => input.value);
+        document.getElementById('startGameBtn').addEventListener('click', () => {
+            const inputs = document.querySelectorAll('.input-field');
+            players = Array.from(inputs).map(input => input.value.trim()).filter(value => value !== '');
+            
+            if (players.length < 2) {
+                alert('Il faut au moins 2 joueurs pour commencer!');
+                return;
+            }
+
             players.forEach(player => scores[player] = 0);
             showGameScreen();
         });
 
-        // Gestion de l'affichage
+        // Fonctions d'affichage
         function showScreen(screenId) {
-            document.querySelectorAll('.screen').forEach(screen => screen.classList.remove('active'));
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
             document.getElementById(screenId).classList.add('active');
         }
 
         function showGameScreen() {
             showScreen('gameScreen');
-            updateDisplay();
+            updateGameDisplay();
             startTimer();
         }
 
-        function updateDisplay() {
-            // Mise à jour des scores
+        function updateGameDisplay() {
+            // Scores
             const scoreDisplay = Object.entries(scores)
                 .map(([player, score]) => `<div class="player-score">${player}: ${score} points</div>`)
                 .join('');
             document.getElementById('scoreDisplay').innerHTML = scoreDisplay;
-            
-            // Affichage du joueur actuel
+
+            // Joueur actuel
             document.getElementById('currentPlayer').textContent = `Au tour de ${players[currentPlayerIndex]}`;
-            
-            // Affichage de la question
+
+            // Question
             const question = questions[currentQuestionIndex];
             document.getElementById('questionText').textContent = question.question;
-            
-            // Affichage des options
+
+            // Options
             const optionsHtml = question.options
                 .map((option, index) => `
                     <div class="option" data-index="${index}">
-                        ${option.text} (${option.points} points)
+                        <span>${option.text}</span>
+                        <span class="points">${option.points} points</span>
                     </div>
                 `)
                 .join('');
             document.getElementById('options').innerHTML = optionsHtml;
-            
-            // Ajout des événements aux options
+
+            // Event listeners des options
             document.querySelectorAll('.option').forEach(option => {
                 option.addEventListener('click', () => toggleOption(option));
             });
@@ -346,63 +349,65 @@
         function startTimer() {
             timeLeft = 30;
             clearInterval(timerInterval);
-            updateTimer();
+            updateTimerDisplay();
+            
             timerInterval = setInterval(() => {
                 timeLeft--;
-                updateTimer();
+                updateTimerDisplay();
                 if (timeLeft <= 0) {
                     clearInterval(timerInterval);
-                    checkAnswers();
+                    submitAnswers();
                 }
             }, 1000);
         }
 
-        function updateTimer() {
-            document.getElementById('timer').textContent = timeLeft;
+        function updateTimerDisplay() {
+            const timerElement = document.getElementById('timer');
+            timerElement.textContent = timeLeft;
+            
+            timerElement.classList.remove('warning', 'danger');
+            if (timeLeft <= 10) {
+                timerElement.classList.add('danger');
+            } else if (timeLeft <= 20) {
+                timerElement.classList.add('warning');
+            }
         }
 
         // Gestion des options
         function toggleOption(option) {
             const index = parseInt(option.dataset.index);
+            const question = questions[currentQuestionIndex];
+
             if (selectedAnswers.has(index)) {
                 selectedAnswers.delete(index);
                 option.classList.remove('selected');
-            } else if (selectedAnswers.size < questions[currentQuestionIndex].maxSelectable) {
+            } else if (selectedAnswers.size < question.maxSelectable) {
                 selectedAnswers.add(index);
                 option.classList.add('selected');
             }
         }
 
-        // Vérification des réponses
-        document.getElementById('submitAnswer').addEventListener('click', checkAnswers);
+        // Soumission des réponses
+        document.getElementById('submitAnswer').addEventListener('click', submitAnswers);
 
-        function checkAnswers() {
+        function submitAnswers() {
             clearInterval(timerInterval);
             const question = questions[currentQuestionIndex];
             let pointsEarned = 0;
 
-            // Calcul des points
             selectedAnswers.forEach(index => {
                 pointsEarned += question.options[index].points;
+                document.querySelectorAll('.option')[index].classList.add('correct');
             });
 
-            // Mise à jour du score
             scores[players[currentPlayerIndex]] += pointsEarned;
 
-            // Affichage des réponses correctes
-            document.querySelectorAll('.option').forEach(option => {
-                const index = parseInt(option.dataset.index);
-                if (selectedAnswers.has(index)) {
-                    option.classList.add('correct');
-                }
-            });
-
-            // Passage au joueur suivant
             setTimeout(() => {
                 currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
                 if (currentPlayerIndex === 0) {
                     currentQuestionIndex++;
                 }
+
                 if (currentQuestionIndex >= questions.length) {
                     showEndScreen();
                 } else {
@@ -414,11 +419,13 @@
 
         function showEndScreen() {
             showScreen('endScreen');
+            
             const sortedScores = Object.entries(scores)
                 .sort(([,a], [,b]) => b - a)
                 .map(([player, score], index) => 
                     `<div class="player-score">${index + 1}. ${player}: ${score} points</div>`)
                 .join('');
+            
             document.getElementById('finalScores').innerHTML = sortedScores;
         }
 
@@ -429,8 +436,10 @@
             selectedAnswers.clear();
             timeLeft = 30;
             clearInterval(timerInterval);
+            
             document.getElementById('playerInputs').innerHTML = 
                 '<input type="text" class="input-field" placeholder="Nom du joueur 1" required>';
+            
             showScreen('configScreen');
         }
     </script>
