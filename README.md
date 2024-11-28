@@ -4,7 +4,9 @@ Un jeu de quiz interactif pour toute la famille, conçu pour s'amuser et apprend
 Description
 Quiz Family est une application de quiz qui permet à plusieurs joueurs de s'affronter sur des questions variées.
 Chaque joueur entre son nom, et le jeu alterne entre les participants pour poser des questions.
-À chaque réponse correcte, des points sont attribués.
+Les réponses correctes rapportent des points, et le score est mis à jour en temps réel.
+
+Avec une interface simple et intuitive, l'application est parfaite pour les soirées entre amis ou en famille !
 
 L'interface est simple et intuitive :
 1. Ajoutez les noms des joueurs.
@@ -14,11 +16,11 @@ L'interface est simple et intuitive :
 ---
 
 Fonctionnalités actuelles
-- Ajout des joueurs : Chaque participant entre son nom avant de commencer.
+- Ajout de joueurs : Chaque participant peut s'inscrire avant de commencer le quiz.
 - Mode tour par tour : Chaque joueur répond à une question pendant son tour.
-- Gestion des scores : Les scores sont affichés en haut pour suivre facilement la progression de chaque joueur.
+- Gestion des scores : Les scores de chaque joueur sont visibles en haut de l'écran.
 - Questions à choix multiples : Les réponses proposées incluent des options variées, mais attention aux pièges !
-
+- Accessibilité : Une interface fluide et facile à prendre en main.
 ---
 
 Technologies utilisées
@@ -35,6 +37,12 @@ Développement en cours :
 - [x] Gestion des tours et mise à jour des scores.
 - [ ] Système de banque de questions dynamique.
 - [x] Ajout d'un chronomètre pour limiter le temps de réponse.
+
+---
+
+Lien vers le Quiz
+En cliquant sur le lien vous pouvez directement jouer :
+👉 Quiz Family sur GitHub
 
 ---
 
