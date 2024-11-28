@@ -42,7 +42,7 @@ Développement en cours :
 
 Lien vers le Quiz
 En cliquant sur le lien vous pouvez directement jouer :
-👉 Quiz Family sur GitHub
+👉 [Quiz Family sur GitHub](https://speedlors.github.io/Quiz/)
 
 ---
 
