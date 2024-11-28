@@ -34,7 +34,7 @@ Développement en cours :
 - [x] Interface de jeu avec questions et options.  
 - [x] Gestion des tours et mise à jour des scores.  
 - [ ] Système de banque de questions dynamique.  
-- [ ] Ajout d'un chronomètre pour limiter le temps de réponse.  
+- [x] Ajout d'un chronomètre pour limiter le temps de réponse.  
 
 ---
 
