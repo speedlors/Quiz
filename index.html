@@ -2,412 +2,453 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Speedlors Quiz</title>
+    <title>Quiz Family</title>
     <style>
-        :root {
-            --bg-primary: #f4f4f4;
-            --bg-secondary: #ffffff;
-            --text-primary: #333333;
-            --text-secondary: #666666;
-            --primary-color: #3498db;
-            --accent-color: #2ecc71;
-        }
-
-        /* Dark mode variables */
-        .dark-mode {
-            --bg-primary: #121212;
-            --bg-secondary: #1e1e1e;
-            --text-primary: #ffffff;
-            --text-secondary: #b0b0b0;
-            --primary-color: #4a90e2;
-            --accent-color: #48c774;
-        }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            transition: background-color 0.3s, color 0.3s;
+            font-family: 'Roboto', sans-serif;
         }
-
+        
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
+            background: #f0f2f5;
+            min-height: 100vh;
+            padding: 20px;
         }
-
+        
         .container {
             max-width: 800px;
             margin: 0 auto;
+            background: white;
+            border-radius: 12px;
             padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
-
-        /* Navigation */
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: var(--bg-secondary);
-            padding: 15px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        .navbar-brand {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--primary-color);
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 20px;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: var(--text-primary);
-            transition: color 0.3s;
-        }
-
-        .nav-links a:hover {
-            color: var(--primary-color);
-        }
-
-        /* Theme Toggle */
-        .theme-toggle {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-
-        /* User Profile */
-        .user-profile {
-            background-color: var(--bg-secondary);
-            border-radius: 10px;
-            padding: 20px;
-            margin: 20px 0;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-
-        /* Quiz Recommendations */
-        .quiz-recommendations {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
-
-        .quiz-card {
-            background-color: var(--bg-secondary);
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            cursor: pointer;
-            transition: transform 0.3s;
-        }
-
-        .quiz-card:hover {
-            transform: scale(1.05);
-        }
-
-        /* Quiz Modal */
-        .quiz-modal {
+        
+        .screen {
             display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            justify-content: center;
-            align-items: center;
         }
-
-        .quiz-modal-content {
-            background-color: var(--bg-secondary);
-            border-radius: 10px;
-            padding: 30px;
-            width: 80%;
-            max-width: 600px;
-            max-height: 80%;
-            overflow-y: auto;
+        
+        .screen.active {
+            display: block;
         }
-
-        .quiz-options {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+        
+        h1, h2 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .player-form {
+            display: flex;
+            flex-direction: column;
             gap: 15px;
-            margin-top: 20px;
+            margin-bottom: 20px;
         }
-
-        .quiz-option {
-            background-color: var(--primary-color);
-            color: white;
+        
+        .input-field {
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .input-field:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+        
+        .btn {
+            padding: 12px 24px;
             border: none;
-            padding: 15px;
-            border-radius: 5px;
+            border-radius: 8px;
+            background: #007bff;
+            color: white;
+            font-size: 16px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: background 0.3s;
         }
-
-        .quiz-option:hover {
-            background-color: var(--accent-color);
+        
+        .btn:hover {
+            background: #0056b3;
         }
-
-        /* Responsive Design */
-        @media (max-width: 600px) {
-            .quiz-options {
-                grid-template-columns: 1fr;
-            }
-
-            .navbar {
-                flex-direction: column;
-                gap: 10px;
-            }
+        
+        .btn-secondary {
+            background: #28a745;
+        }
+        
+        .btn-secondary:hover {
+            background: #218838;
+        }
+        
+        .score-display {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        
+        .player-score {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            text-align: center;
+            min-width: 150px;
+            font-family: 'Arial', sans-serif;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s ease-in-out;
+        }
+        
+        .player-score:hover {
+            transform: translateY(-3px);
+        }
+        
+        .current-player {
+            text-align: center;
+            font-size: 20px;
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+        
+        .timer {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: #28a745;
+            margin-bottom: 20px;
+        }
+        
+        .timer.warning {
+            color: #ffc107;
+        }
+        
+        .timer.danger {
+            color: #dc3545;
+        }
+        
+        .question-text {
+            font-size: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .options {
+            display: grid;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .option {
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .option:hover {
+            background: #f8f9fa;
+        }
+        
+        .option.selected {
+            border-color: #007bff;
+            background: #e7f1ff;
+        }
+        
+        .option.correct {
+            border-color: #28a745;
+            background: #d4edda;
+        }
+        
+        .option.incorrect {
+            border-color: #dc3545;
+            background: #f8d7da;
+        }
+        
+        .points {
+            display: none;
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-weight: bold;
+            color: #666;
+        }
+        
+        .option.selected .points {
+            display: inline;
+        }
+        
+        .button-container {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        #finalScores {
+            text-align: center;
+            font-size: 18px;
+            margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
-    <!-- Navigation Bar -->
-    <nav class="navbar">
-        <div class="navbar-brand">Speedlors Quiz</div>
-        <div class="nav-links">
-            <a href="#home">Accueil</a>
-            <a href="#categories">Catégories</a>
-            <a href="#profile">Profil</a>
-        </div>
-        <button id="themeToggle" class="theme-toggle">Mode Sombre</button>
-    </nav>
-
     <div class="container">
-        <!-- User Profile Section -->
-        <section class="user-profile">
-            <h2 id="userProfileName">QuizMaster</h2>
-            <p>Score Total : <span id="totalScore">0</span></p>
-            <p>Quiz Complétés : <span id="completedQuizCount">0</span></p>
-        </section>
-
-        <!-- Quiz Recommendations -->
-        <section>
-            <h2>Quiz Recommandés</h2>
-            <div id="quizRecommendations" class="quiz-recommendations">
-                <!-- Quiz cards will be dynamically added here -->
-            </div>
-        </section>
-
-        <!-- Quiz Modal -->
-        <div id="quizModal" class="quiz-modal">
-            <div class="quiz-modal-content">
-                <h2 id="quizTitle">Titre du Quiz</h2>
-                <p id="questionText">Question</p>
-                <div id="quizOptions" class="quiz-options">
-                    <!-- Quiz options will be dynamically added here -->
+        <div id="configScreen" class="screen active">
+            <h1>Quiz Family</h1>
+            <div class="player-form">
+                <div id="playerInputs">
+                    <input type="text" class="input-field" placeholder="Nom du joueur 1" required>
                 </div>
+                <div class="button-container">
+                    <button type="button" class="btn btn-secondary" id="addPlayerBtn">Ajouter un joueur</button>
+                    <button type="button" class="btn" id="startGameBtn">Commencer</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="gameScreen" class="screen">
+            <div id="scoreDisplay" class="score-display"></div>
+            <div id="currentPlayer" class="current-player"></div>
+            <div id="timer" class="timer">30</div>
+            <div id="questionText" class="question-text"></div>
+            <div id="options" class="options"></div>
+            <div class="button-container">
+                <button id="submitAnswer" class="btn">Valider</button>
+            </div>
+        </div>
+
+        <div id="endScreen" class="screen">
+            <h2>Fin de la partie!</h2>
+            <div id="finalScores"></div>
+            <div class="button-container">
+                <button class="btn" onclick="resetGame()">Nouvelle Partie</button>
             </div>
         </div>
     </div>
 
     <script>
-        // Quiz Data and AI Service Simulation
-        const quizzes = [
+        const questions = [
             {
-                id: 'tech-quiz-1',
-                title: 'Quiz sur la Technologie',
-                category: 'Technologie',
-                questions: [
-                    {
-                        id: 'q1',
-                        text: 'Quelle est la dernière tendance en intelligence artificielle ?',
-                        options: ['Apprentissage Automatique', 'IA Générative', 'Informatique Quantique', 'Blockchain'],
-                        correctAnswer: 'IA Générative'
-                    },
-                    {
-                        id: 'q2',
-                        text: 'Quel est le langage de programmation le plus populaire en 2024 ?',
-                        options: ['Python', 'JavaScript', 'Java', 'C++'],
-                        correctAnswer: 'Python'
-                    }
-                ]
+                question: "Cite une boisson de petit-déjeuner",
+                options: [
+                    { text: "Café", points: 12, isCorrect: true },
+                    { text: "Thé", points: 10, isCorrect: true },
+                    { text: "Jus d'orange", points: 8, isCorrect: true },
+                    { text: "Bière", points: -1, isCorrect: false },
+                    { text: "Vin rouge", points: -1, isCorrect: false }
+                ],
+                maxSelectable: 4
             },
             {
-                id: 'science-quiz-1',
-                title: 'Quiz sur les Sciences',
-                category: 'Science',
-                questions: [
-                    {
-                        id: 'q1',
-                        text: 'Quelle est la plus grande planète du système solaire ?',
-                        options: ['Saturne', 'Neptune', 'Jupiter', 'Uranus'],
-                        correctAnswer: 'Jupiter'
-                    }
-                ]
+                question: "Cite un sport d'hiver",
+                options: [
+                    { text: "Ski", points: 12, isCorrect: true },
+                    { text: "Football", points: -1, isCorrect: false },
+                    { text: "Patinage", points: 8, isCorrect: true },
+                    { text: "Tennis", points: -1, isCorrect: false },
+                    { text: "Snowboard", points: 10, isCorrect: true }
+                ],
+                maxSelectable: 4
+            },
+            {
+                question: "Cite un fruit rouge",
+                options: [
+                    { text: "Fraise", points: 12, isCorrect: true },
+                    { text: "Banane", points: -1, isCorrect: false },
+                    { text: "Framboise", points: 10, isCorrect: true },
+                    { text: "Kiwi", points: -1, isCorrect: false },
+                    { text: "Cerise", points: 8, isCorrect: true }
+                ],
+                maxSelectable: 4
+            },
+            {
+                question: "Cite un pays d'Europe",
+                options: [
+                    { text: "France", points: 12, isCorrect: true },
+                    { text: "Japon", points: -1, isCorrect: false },
+                    { text: "Espagne", points: 10, isCorrect: true },
+                    { text: "Brésil", points: -1, isCorrect: false },
+                    { text: "Italie", points: 8, isCorrect: true }
+                ],
+                maxSelectable: 4
+            },
+            {
+                question: "Cite un animal de la ferme",
+                options: [
+                    { text: "Poule", points: 12, isCorrect: true },
+                    { text: "Lion", points: -1, isCorrect: false },
+                    { text: "Vache", points: 10, isCorrect: true },
+                    { text: "Girafe", points: -1, isCorrect: false },
+                    { text: "Cochon", points: 8, isCorrect: true }
+                ],
+                maxSelectable: 4
             }
         ];
 
-        // State Management
-        let currentQuiz = null;
+        let players = [];
+        let scores = {};
         let currentQuestionIndex = 0;
-        let userAnswers = {};
-        let userProfile = {
-            username: 'QuizMaster',
-            totalScore: 0,
-            completedQuizzes: []
-        };
+        let currentPlayerIndex = 0;
+        let selectedAnswers = new Set();
+        let timerInterval;
+        let timeLeft = 30;
 
-        // AI Service Simulation
-        const AIService = {
-            generateExplanation: function(question, userAnswer) {
-                if (userAnswer === question.correctAnswer) {
-                    return "Bravo ! Cette réponse montre une compréhension solide du sujet.";
-                } else {
-                    return `La réponse correcte est ${question.correctAnswer}. Voici pourquoi...`;
-                }
-            }
-        };
-
-        // Theme Toggle
-        const themeToggle = document.getElementById('themeToggle');
-        themeToggle.addEventListener('click', () => {
-            document.body.classList.toggle('dark-mode');
-            themeToggle.textContent = document.body.classList.contains('dark-mode') 
-                ? 'Mode Clair' 
-                : 'Mode Sombre';
+        document.getElementById('addPlayerBtn').addEventListener('click', () => {
+            const playerCount = document.querySelectorAll('.input-field').length + 1;
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.className = 'input-field';
+            input.placeholder = `Nom du joueur ${playerCount}`;
+            input.required = true;
+            document.getElementById('playerInputs').appendChild(input);
         });
 
-        // Render Quiz Recommendations
-        function renderRecommendations() {
-            const recommendationsContainer = document.getElementById('quizRecommendations');
-            recommendationsContainer.innerHTML = '';
+        document.getElementById('startGameBtn').addEventListener('click', () => {
+            const inputs = document.querySelectorAll('.input-field');
+            players = Array.from(inputs).map(input => input.value.trim()).filter(value => value !== '');
+            if (players.length < 2) {
+                alert('Il faut au moins 2 joueurs pour commencer!');
+                return;
+            }
+            players.forEach(player => scores[player] = 0);
+            showGameScreen();
+        });
 
-            quizzes.forEach(quiz => {
-                const quizCard = document.createElement('div');
-                quizCard.classList.add('quiz-card');
-                quizCard.innerHTML = `
-                    <h3>${quiz.title}</h3>
-                    <p>Catégorie : ${quiz.category}</p>
-                    <button onclick="startQuiz('${quiz.id}')">Commencer</button>
-                `;
-                recommendationsContainer.appendChild(quizCard);
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
             });
+            document.getElementById(screenId).classList.add('active');
         }
 
-        // Start Quiz
-        function startQuiz(quizId) {
-            currentQuiz = quizzes.find(q => q.id === quizId);
-            currentQuestionIndex = 0;
-            userAnswers = {};
-
-            if (currentQuiz) {
-                showQuizModal();
-                renderQuestion();
-            }
+        function showGameScreen() {
+            showScreen('gameScreen');
+            updateGameDisplay();
+            startTimer();
         }
 
-        // Render Current Question
-        function renderQuestion() {
-            const quizModal = document.getElementById('quizModal');
-            const quizTitle = document.getElementById('quizTitle');
-            const questionText = document.getElementById('questionText');
-            const quizOptions = document.getElementById('quizOptions');
+        function updateGameDisplay() {
+            const scoreDisplay = Object.entries(scores)
+                .map(([player, score]) => `<div class="player-score">${player}: ${score} points</div>`)
+                .join('');
+            document.getElementById('scoreDisplay').innerHTML = scoreDisplay;
 
-            if (currentQuiz && currentQuestionIndex < currentQuiz.questions.length) {
-                const currentQuestion = currentQuiz.questions[currentQuestionIndex];
-                
-                quizTitle.textContent = currentQuiz.title;
-                questionText.textContent = currentQuestion.text;
+            document.getElementById('currentPlayer').textContent = `Au tour de ${players[currentPlayerIndex]}`;
 
-                quizOptions.innerHTML = '';
-                currentQuestion.options.forEach(option => {
-                    const optionButton = document.createElement('button');
-                    optionButton.textContent = option;
-                    optionButton.classList.add('quiz-option');
-                    optionButton.onclick = () => handleAnswer(option);
-                    quizOptions.appendChild(optionButton);
-                });
-            } else {
-                completeQuiz();
-            }
-        }
+            const question = questions[currentQuestionIndex];
+            document.getElementById('questionText').textContent = question.question;
 
-        // Handle User Answer
-        function handleAnswer(selectedAnswer) {
-            if (!currentQuiz) return;
-
-            const currentQuestion = currentQuiz.questions[currentQuestionIndex];
-            userAnswers[currentQuestion.id] = selectedAnswer;
-
-            // Move to next question or complete quiz
-            currentQuestionIndex++;
-            if (currentQuestionIndex < currentQuiz.questions.length) {
-                renderQuestion();
-            } else {
-                completeQuiz();
-            }
-        }
-
-        // Complete Quiz
-        function completeQuiz() {
-            if (!currentQuiz) return;
-
-            let score = 0;
-            const explanations = {};
-
-            // Calculate score and generate explanations
-            currentQuiz.questions.forEach(question => {
-                const userAnswer = userAnswers[question.id];
-                if (userAnswer === question.correctAnswer) {
-                    score++;
-                }
-                explanations[question.id] = AIService.generateExplanation(question, userAnswer);
-            });
-
-            // Update user profile
-            userProfile.totalScore += score;
-            userProfile.completedQuizzes.push(currentQuiz.id);
-
-            // Update UI
-            document.getElementById('totalScore').textContent = userProfile.totalScore;
-            document.getElementById('completedQuizCount').textContent = userProfile.completedQuizzes.length;
-
-            // Show results and explanations
-            showQuizResults(score, explanations);
-        }
-
-        // Show Quiz Results
-        function showQuizResults(score, explanations) {
-            const quizOptions = document.getElementById('quizOptions');
-            quizOptions.innerHTML = `
-                <h3>Résultats du Quiz</h3>
-                <p>Score : ${score}/${currentQuiz.questions.length}</p>
-                ${Object.entries(explanations).map(([qId, explanation]) => `
-                    <div>
-                        <p><strong>Question:</strong> ${currentQuiz.questions.find(q => q.id === qId).text}</p>
-                        <p><strong>Explication:</strong> ${explanation}</p>
+            const optionsHtml = question.options
+                .map((option, index) => `
+                    <div class="option" data-index="${index}">
+                        ${option.text}
+                        <span class="points">${option.points > 0 ? '+' : ''}${option.points} points</span>
                     </div>
-                `).join('')}
-                <button onclick="closeQuizModal()">Fermer</button>
-            `;
+                `)
+                .join('');
+            document.getElementById('options').innerHTML = optionsHtml;
+
+            document.querySelectorAll('.option').forEach(option => {
+                option.addEventListener('click', () => toggleOption(option));
+            });
         }
 
-        // Show Quiz Modal
-        function showQuizModal() {
-            document.getElementById('quizModal').style.display = 'flex';
+        function startTimer() {
+            timeLeft = 30;
+            clearInterval(timerInterval);
+            updateTimerDisplay();
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    submitAnswers();
+                }
+            }, 1000);
         }
 
-        // Close Quiz Modal
-        function closeQuizModal() {
-            document.getElementById('quizModal').style.display = 'none';
-            currentQuiz = null;
+        function updateTimerDisplay() {
+            const timerElement = document.getElementById('timer');
+            timerElement.textContent = timeLeft;
+            timerElement.classList.remove('warning', 'danger');
+            if (timeLeft <= 10) {
+                timerElement.classList.add('danger');
+            } else if (timeLeft <= 20) {
+                timerElement.classList.add('warning');
+            }
+        }
+
+        function toggleOption(option) {
+            const index = parseInt(option.dataset.index);
+            const question = questions[currentQuestionIndex];
+            if (selectedAnswers.has(index)) {
+                selectedAnswers.delete(index);
+                option.classList.remove('selected');
+            } else if (selectedAnswers.size < question.maxSelectable) {
+                selectedAnswers.add(index);
+                option.classList.add('selected');
+            }
+        }
+
+        document.getElementById('submitAnswer').addEventListener('click', submitAnswers);
+
+        function submitAnswers() {
+            clearInterval(timerInterval);
+            const question = questions[currentQuestionIndex];
+            let pointsEarned = 0;
+            selectedAnswers.forEach(index => {
+                const optionElement = document.querySelectorAll('.option')[index];
+                if (question.options[index].isCorrect) {
+                    optionElement.classList.add('correct');
+                } else {
+                    optionElement.classList.add('incorrect');
+                }
+                pointsEarned += question.options[index].points;
+            });
+            scores[players[currentPlayerIndex]] += pointsEarned;
+
+            setTimeout(() => {
+                currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
+                if (currentPlayerIndex === 0) {
+                    currentQuestionIndex++;
+                }
+                if (currentQuestionIndex >= questions.length) {
+                    showEndScreen();
+                } else {
+                    selectedAnswers.clear();
+                    showGameScreen();
+                }
+            }, 2000);
+        }
+
+        function showEndScreen() {
+            showScreen('endScreen');
+            const sortedScores = Object.entries(scores)
+                .sort(([, a], [, b]) => b - a)
+                .map(([player, score], index) => `<div class="player-score">${index + 1}. ${player}: ${score} points</div>`)
+                .join('');
+            document.getElementById('finalScores').innerHTML = sortedScores;
+        }
+
+        function resetGame() {
             currentQuestionIndex = 0;
+            currentPlayerIndex = 0;
+            scores = {};
+            selectedAnswers.clear();
+            timeLeft = 30;
+            clearInterval(timerInterval);
+            document.getElementById('playerInputs').innerHTML =
+                '<input type="text" class="input-field" placeholder="Nom du joueur 1" required>';
+            showScreen('configScreen');
         }
-
-        // Initialize App
-        renderRecommendations();
     </script>
 </body>
 </html>
