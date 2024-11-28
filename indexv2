@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speedlors Quiz</title>
+    <style>
+        :root {
+            --bg-primary: #f4f4f4;
+            --bg-secondary: #ffffff;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --primary-color: #3498db;
+            --accent-color: #2ecc71;
+        }
+
+        /* Dark mode variables */
+        .dark-mode {
+            --bg-primary: #121212;
+            --bg-secondary: #1e1e1e;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --primary-color: #4a90e2;
+            --accent-color: #48c774;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Navigation */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--bg-secondary);
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        /* User Profile */
+        .user-profile {
+            background-color: var(--bg-secondary);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        /* Quiz Recommendations */
+        .quiz-recommendations {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .quiz-card {
+            background-color: var(--bg-secondary);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .quiz-card:hover {
+            transform: scale(1.05);
+        }
+
+        /* Quiz Modal */
+        .quiz-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .quiz-modal-content {
+            background-color: var(--bg-secondary);
+            border-radius: 10px;
+            padding: 30px;
+            width: 80%;
+            max-width: 600px;
+            max-height: 80%;
+            overflow-y: auto;
+        }
+
+        .quiz-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .quiz-option {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .quiz-option:hover {
+            background-color: var(--accent-color);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            .quiz-options {
+                grid-template-columns: 1fr;
+            }
+
+            .navbar {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="navbar-brand">Speedlors Quiz</div>
+        <div class="nav-links">
+            <a href="#home">Accueil</a>
+            <a href="#categories">Catégories</a>
+            <a href="#profile">Profil</a>
+        </div>
+        <button id="themeToggle" class="theme-toggle">Mode Sombre</button>
+    </nav>
+
+    <div class="container">
+        <!-- User Profile Section -->
+        <section class="user-profile">
+            <h2 id="userProfileName">QuizMaster</h2>
+            <p>Score Total : <span id="totalScore">0</span></p>
+            <p>Quiz Complétés : <span id="completedQuizCount">0</span></p>
+        </section>
+
+        <!-- Quiz Recommendations -->
+        <section>
+            <h2>Quiz Recommandés</h2>
+            <div id="quizRecommendations" class="quiz-recommendations">
+                <!-- Quiz cards will be dynamically added here -->
+            </div>
+        </section>
+
+        <!-- Quiz Modal -->
+        <div id="quizModal" class="quiz-modal">
+            <div class="quiz-modal-content">
+                <h2 id="quizTitle">Titre du Quiz</h2>
+                <p id="questionText">Question</p>
+                <div id="quizOptions" class="quiz-options">
+                    <!-- Quiz options will be dynamically added here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Quiz Data and AI Service Simulation
+        const quizzes = [
+            {
+                id: 'tech-quiz-1',
+                title: 'Quiz sur la Technologie',
+                category: 'Technologie',
+                questions: [
+                    {
+                        id: 'q1',
+                        text: 'Quelle est la dernière tendance en intelligence artificielle ?',
+                        options: ['Apprentissage Automatique', 'IA Générative', 'Informatique Quantique', 'Blockchain'],
+                        correctAnswer: 'IA Générative'
+                    },
+                    {
+                        id: 'q2',
+                        text: 'Quel est le langage de programmation le plus populaire en 2024 ?',
+                        options: ['Python', 'JavaScript', 'Java', 'C++'],
+                        correctAnswer: 'Python'
+                    }
+                ]
+            },
+            {
+                id: 'science-quiz-1',
+                title: 'Quiz sur les Sciences',
+                category: 'Science',
+                questions: [
+                    {
+                        id: 'q1',
+                        text: 'Quelle est la plus grande planète du système solaire ?',
+                        options: ['Saturne', 'Neptune', 'Jupiter', 'Uranus'],
+                        correctAnswer: 'Jupiter'
+                    }
+                ]
+            }
+        ];
+
+        // State Management
+        let currentQuiz = null;
+        let currentQuestionIndex = 0;
+        let userAnswers = {};
+        let userProfile = {
+            username: 'QuizMaster',
+            totalScore: 0,
+            completedQuizzes: []
+        };
+
+        // AI Service Simulation
+        const AIService = {
+            generateExplanation: function(question, userAnswer) {
+                if (userAnswer === question.correctAnswer) {
+                    return "Bravo ! Cette réponse montre une compréhension solide du sujet.";
+                } else {
+                    return `La réponse correcte est ${question.correctAnswer}. Voici pourquoi...`;
+                }
+            }
+        };
+
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            themeToggle.textContent = document.body.classList.contains('dark-mode') 
+                ? 'Mode Clair' 
+                : 'Mode Sombre';
+        });
+
+        // Render Quiz Recommendations
+        function renderRecommendations() {
+            const recommendationsContainer = document.getElementById('quizRecommendations');
+            recommendationsContainer.innerHTML = '';
+
+            quizzes.forEach(quiz => {
+                const quizCard = document.createElement('div');
+                quizCard.classList.add('quiz-card');
+                quizCard.innerHTML = `
+                    <h3>${quiz.title}</h3>
+                    <p>Catégorie : ${quiz.category}</p>
+                    <button onclick="startQuiz('${quiz.id}')">Commencer</button>
+                `;
+                recommendationsContainer.appendChild(quizCard);
+            });
+        }
+
+        // Start Quiz
+        function startQuiz(quizId) {
+            currentQuiz = quizzes.find(q => q.id === quizId);
+            currentQuestionIndex = 0;
+            userAnswers = {};
+
+            if (currentQuiz) {
+                showQuizModal();
+                renderQuestion();
+            }
+        }
+
+        // Render Current Question
+        function renderQuestion() {
+            const quizModal = document.getElementById('quizModal');
+            const quizTitle = document.getElementById('quizTitle');
+            const questionText = document.getElementById('questionText');
+            const quizOptions = document.getElementById('quizOptions');
+
+            if (currentQuiz && currentQuestionIndex < currentQuiz.questions.length) {
+                const currentQuestion = currentQuiz.questions[currentQuestionIndex];
+                
+                quizTitle.textContent = currentQuiz.title;
+                questionText.textContent = currentQuestion.text;
+
+                quizOptions.innerHTML = '';
+                currentQuestion.options.forEach(option => {
+                    const optionButton = document.createElement('button');
+                    optionButton.textContent = option;
+                    optionButton.classList.add('quiz-option');
+                    optionButton.onclick = () => handleAnswer(option);
+                    quizOptions.appendChild(optionButton);
+                });
+            } else {
+                completeQuiz();
+            }
+        }
+
+        // Handle User Answer
+        function handleAnswer(selectedAnswer) {
+            if (!currentQuiz) return;
+
+            const currentQuestion = currentQuiz.questions[currentQuestionIndex];
+            userAnswers[currentQuestion.id] = selectedAnswer;
+
+            // Move to next question or complete quiz
+            currentQuestionIndex++;
+            if (currentQuestionIndex < currentQuiz.questions.length) {
+                renderQuestion();
+            } else {
+                completeQuiz();
+            }
+        }
+
+        // Complete Quiz
+        function completeQuiz() {
+            if (!currentQuiz) return;
+
+            let score = 0;
+            const explanations = {};
+
+            // Calculate score and generate explanations
+            currentQuiz.questions.forEach(question => {
+                const userAnswer = userAnswers[question.id];
+                if (userAnswer === question.correctAnswer) {
+                    score++;
+                }
+                explanations[question.id] = AIService.generateExplanation(question, userAnswer);
+            });
+
+            // Update user profile
+            userProfile.totalScore += score;
+            userProfile.completedQuizzes.push(currentQuiz.id);
+
+            // Update UI
+            document.getElementById('totalScore').textContent = userProfile.totalScore;
+            document.getElementById('completedQuizCount').textContent = userProfile.completedQuizzes.length;
+
+            // Show results and explanations
+            showQuizResults(score, explanations);
+        }
+
+        // Show Quiz Results
+        function showQuizResults(score, explanations) {
+            const quizOptions = document.getElementById('quizOptions');
+            quizOptions.innerHTML = `
+                <h3>Résultats du Quiz</h3>
+                <p>Score : ${score}/${currentQuiz.questions.length}</p>
+                ${Object.entries(explanations).map(([qId, explanation]) => `
+                    <div>
+                        <p><strong>Question:</strong> ${currentQuiz.questions.find(q => q.id === qId).text}</p>
+                        <p><strong>Explication:</strong> ${explanation}</p>
+                    </div>
+                `).join('')}
+                <button onclick="closeQuizModal()">Fermer</button>
+            `;
+        }
+
+        // Show Quiz Modal
+        function showQuizModal() {
+            document.getElementById('quizModal').style.display = 'flex';
+        }
+
+        // Close Quiz Modal
+        function closeQuizModal() {
+            document.getElementById('quizModal').style.display = 'none';
+            currentQuiz = null;
+            currentQuestionIndex = 0;
+        }
+
+        // Initialize App
+        renderRecommendations();
+    </script>
+</body>
+</html>
